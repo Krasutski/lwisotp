@@ -19,11 +19,15 @@
 /* Private: The default timeout to use when waiting for a response during a
  * multi-frame send or receive.
  */
-#define ISO_TP_DEFAULT_RESPONSE_TIMEOUT 100
+#define ISO_TP_DEFAULT_RESPONSE_TIMEOUT 250
 
 /* Private: Determines if by default, padding is added to ISO-TP message frames.
  */
 #define ISO_TP_FRAME_PADDING
+
+
+/* Enable or disable the assert function */
+#define CONFIG_ISOTP_ENABLE_ASSERT 1
 
 #endif
 

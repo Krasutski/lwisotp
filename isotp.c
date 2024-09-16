@@ -1,6 +1,9 @@
 #include <stdint.h>
-#include "assert.h"
 #include "isotp.h"
+
+#if CONFIG_ISOTP_ENABLE_ASSERT == 1U //DKr, Fix KEIL build
+#include "assert.h"
+#endif /* CONFIG_ISOTP_ENABLE_ASSERT */
 
 ///////////////////////////////////////////////////////
 ///                 STATIC FUNCTIONS                ///
@@ -63,7 +66,9 @@ static int isotp_send_single_frame(IsoTpLink* link, uint32_t id) {
     int ret;
 
     /* multi frame message length must greater than 7  */
+#if CONFIG_ISOTP_ENABLE_ASSERT == 1U
     assert(link->send_size <= 7);
+#endif /* CONFIG_ISOTP_ENABLE_ASSERT */
 
     /* setup message  */
     message.as.single_frame.type = ISOTP_PCI_TYPE_SINGLE;
@@ -89,7 +94,9 @@ static int isotp_send_first_frame(IsoTpLink* link, uint32_t id) {
     int ret;
 
     /* multi frame message length must greater than 7  */
+#if CONFIG_ISOTP_ENABLE_ASSERT == 1U
     assert(link->send_size > 7);
+#endif /* CONFIG_ISOTP_ENABLE_ASSERT */
 
     /* setup message  */
     message.as.first_frame.type = ISOTP_PCI_TYPE_FIRST_FRAME;
@@ -114,7 +121,9 @@ static int isotp_send_consecutive_frame(IsoTpLink* link) {
     int ret;
 
     /* multi frame message length must greater than 7  */
+#if CONFIG_ISOTP_ENABLE_ASSERT == 1U
     assert(link->send_size > 7);
+#endif /* CONFIG_ISOTP_ENABLE_ASSERT */
 
     /* setup message  */
     message.as.consecutive_frame.type = TSOTP_PCI_TYPE_CONSECUTIVE_FRAME;
