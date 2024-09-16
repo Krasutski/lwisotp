@@ -29,5 +29,8 @@
 /* Enable or disable the assert function */
 #define CONFIG_ISOTP_ENABLE_ASSERT              1
 
+/* Debug print redirection */
+#define ISOTP_DEBUG(...) 
+
 #endif
 
