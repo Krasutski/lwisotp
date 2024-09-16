@@ -11,6 +11,9 @@
 #else
 #error "unsupported byte ordering"
 #endif
+#elif defined(__CC_ARM)
+#    define ISOTP_BYTE_ORDER_LITTLE_ENDIAN
+#else
 #endif
 
 /**************************************************************
