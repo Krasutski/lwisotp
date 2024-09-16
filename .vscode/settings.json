@@ -1,0 +1,92 @@
+{
+    "C_Cpp": {
+        "default": {
+            "configurationProvider": "ms-vscode.cmake-tools"
+        },
+        "autoAddFileAssociations": false,
+    },
+    "C_Cpp.codeAnalysis.clangTidy.enabled": true,
+    // "clang-format.executable": "/usr/bin/clang-format",
+    "clang-tidy": {
+        "executable": "/usr/bin/clang-tidy",
+        "compilerArgs": [
+            "-DBUILD_AXXX_CONF=1",
+            // "-include ${workspaceFolder}/src/inc/build_conf.h"
+        ],
+        "lintOnSave": true
+    },
+    "cmake": {
+        // "parallelJobs": 0,
+        "generator": "Ninja",
+        // "generator": "Unix Makefiles",
+        //"sourceDirectory": "${workspaceFolder}/tests/",
+        "sourceDirectory": "${workspaceFolder}/",
+        "configureOnOpen": true,
+        "clearOutputBeforeBuild": true,
+        "saveBeforeBuild": true,
+        "configureArgs": [
+            // "-DCMAKE_VERBOSE_MAKEFILE:BOOL=ON",
+            "--fresh",
+            "-DTOOLCHAIN_PREFIX=${env:GCC_PATH}",
+        ]
+    },
+    "cortex-debug.armToolchainPath": "${env:GCC_PATH}/bin/",
+    "editor": {
+        "formatOnSave": true,
+        "formatOnType": true,
+        "tabCompletion": "off",
+        "tabSize": 4,
+        "renderWhitespace": "all",
+        // "defaultFormatter": "xaver.clang-format"
+    },
+    "files": {
+        "insertFinalNewline": true,
+        "trimTrailingWhitespace": true,
+        "autoSave": "onFocusChange",
+        "associations": {
+            "*.h": "c",
+            "*.c": "c"
+        }
+    },
+    "sonarlint": {
+        "connectedMode.project": {
+            "connectionId": "",
+            "projectKey": ""
+        },
+        "rules": {
+            "c:S1066": {
+                "level": "off"
+            },
+            "c:S134": {
+                "level": "off"
+            }
+        }
+    },
+    "search": {
+        "exclude": {
+            "tests": true
+        }
+    },
+    "git": {
+        "autofetch": true,
+        "rebaseWhenSync": true,
+        "allowForcePush": true,
+        "ignoreRebaseWarning": true,
+    },
+    "[json]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    },
+    // I dont know why but seems like SonarLint isn't working when line not last
+    "sonarlint.pathToCompileCommands": "${workspaceFolder}/build/compile_commands.json",
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.autopep8"
+    },
+    "remote.autoForwardPortsFallback": 0,
+    "VsCodeTaskButtons.tasks": [
+        {
+            "label": "Git Clean",
+            "task": "cleanRepo",
+            "tooltip": "Run git clean",
+        },
+    ]
+}

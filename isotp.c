@@ -1,5 +1,4 @@
 #include "isotp.h"
-#include <stdint.h>
 
 #if CONFIG_ISOTP_ENABLE_ASSERT == 1U
 #    include "assert.h"

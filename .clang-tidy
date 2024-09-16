@@ -1,0 +1,72 @@
+Checks:       '-*,readability-identifier-naming'
+WarningsAsErrors: ''
+HeaderFilterRegex: ''
+FormatStyle:     file
+User:            user
+CheckOptions:
+  - key:      readability-identifier-naming.ConstantCase
+    value:    'lower_case'
+  - key:      readability-identifier-naming.ConstantParameterCase
+    value:    'lower_case'
+  - key:      readability-identifier-naming.ConstantPointerParameterCase
+    value:    'lower_case'
+  - key:      readability-identifier-naming.EnumCase
+    value:    'lower_case'
+  - key:      readability-identifier-naming.EnumSuffix
+    value:    '_e'
+  - key:      readability-identifier-naming.EnumConstantCase
+    value:    'UPPER_CASE'
+  - key:      readability-identifier-naming.GlobalConstantCase
+    value:    'UPPER_CASE'
+  - key:      readability-identifier-naming.GlobalConstantPointerCase
+    value:    'lower_case'
+  - key:      readability-identifier-naming.GlobalPointerPrefix
+    value:    '_'
+  - key:      readability-identifier-naming.GlobalFunctionCase
+    value:    'lower_case'
+  - key:      readability-identifier-naming.GlobalFunctionIgnoredRegexp
+    value:    'DEFINE_[^(]*'
+  - key:      readability-identifier-naming.FunctionCase
+    value:    'lower_case'
+  - key:      readability-identifier-naming.FunctionPrefix
+    value:    '_'
+  - key:      readability-identifier-naming.GlobalPointerCase
+    value:    'lower_case'
+  - key:      readability-identifier-naming.GlobalVariableCase
+    value:    'lower_case'
+  - key:      readability-identifier-naming.GlobalVariablePrefix
+    value:    '_'
+  - key:      readability-identifier-naming.LocalConstantCase
+    value:    'UPPER_CASE'
+  - key:      readability-identifier-naming.LocalConstantPointerCase
+    value:    'UPPER_CASE'
+  - key:      readability-identifier-naming.LocalPointerCase
+    value:    lower_case
+  - key:      readability-identifier-naming.LocalVariableCase
+    value:    'lower_case'
+  - key:      readability-identifier-naming.MacroDefinitionCase
+    value:    'UPPER_CASE'
+  - key:      readability-identifier-naming.MacroDefinitionIgnoredRegexp
+    value:    '_([_A-Z+]*)*'
+  - key:      readability-identifier-naming.ParameterCase
+    value:    'lower_case'
+  - key:      readability-identifier-naming.ParameterPackCase
+    value:    'lower_case'
+  - key:      readability-identifier-naming.PointerParameterCase
+    value:    'lower_case'
+  - key:      readability-identifier-naming.StaticConstantCase
+    value:    'UPPER_CASE'
+  - key:      readability-identifier-naming.StaticVariableCase
+    value:    'lower_case'
+  - key:      readability-identifier-naming.StaticVariablePrefix
+    value:    '_'
+  - key:      readability-identifier-naming.StructCase
+    value:    'lower_case'
+  - key:      readability-identifier-naming.StructSuffix
+    value:    '_s'
+  - key:      readability-identifier-naming.UnionCase
+    value:    'lower_case'
+  - key:      readability-identifier-naming.UnionSuffix
+    value:    '_t'
+  - key:      readability-identifier-naming.VariableCase
+    value:    'lower_case'

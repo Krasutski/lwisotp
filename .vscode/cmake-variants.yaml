@@ -1,0 +1,27 @@
+buildType:
+  default: release
+  choices:
+    debug:
+      short: Debug
+      long: Disables optimizations and includes debug info.
+      buildType: Debug
+      settings:
+        DEBUG_BUILD: 1
+    release:
+      short: Release
+      long: Includes optimizations but no debug info.
+      buildType: Release
+
+platform:
+  default: Firmware
+  choices:
+    Firmware:
+      short: Firmware
+      long: ARM-NONE-EABI Toolchain
+      settings:
+        CMAKE_TOOLCHAIN_FILE: cmake/gcc_tools.cmake
+    UT:
+      short: Unit Tests
+      long: use this for unit tests
+      settings:
+        BUILD_CONFIG_UNIT_TESTS: y
