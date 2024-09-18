@@ -5,8 +5,6 @@
 #include <string.h>
 
 #ifdef __cplusplus
-#    include <stdint.h>
-
 extern "C" {
 #endif
 
@@ -54,19 +52,24 @@ typedef struct isotp_link_s {
                                   end at receive FC */
     int receive_protocol_result;
     uint8_t receive_status;
+
+    /* can interface id */
+    uint8_t can_iface_id;
 } isotp_link_t;
 
 /**
  * @brief Initialises the ISO-TP library.
  *
  * @param link The @code isotp_link_t @endcode instance intended for receiving and transmitting data.
- * @param send_id The ID used to send data to other CAN nodes.
+ * @param can_iface_id The can interface ID used to manage several CAN interfaces.
+ * @param tx_buf A pointer to an area in memory which can be used as a buffer for data to be sent.
  * @param tx_buf A pointer to an area in memory which can be used as a buffer for data to be sent.
  * @param tx_buf_size The size of the buffer area.
  * @param rx_buf A pointer to an area in memory which can be used as a buffer for data to be received.
  * @param rx_buf_size The size of the buffer area.
  */
 void isotp_init_link(isotp_link_t *link,
+                     uint8_t can_iface_id,
                      uint32_t send_id,
                      uint8_t *tx_buf,
                      uint16_t tx_buf_size,

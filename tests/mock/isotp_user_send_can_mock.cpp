@@ -1,5 +1,6 @@
 
 #include <CppUTestExt/MockSupport.h>
+#include <isotp.h>
 
 extern "C" {
 
@@ -12,12 +13,16 @@ void print_array(const uint8_t *data, const uint8_t size) {
 }
 #endif
 
-int isotp_user_send_can(const uint32_t arbitration_id, const uint8_t *data, const uint8_t size) {
+int isotp_user_send_can(const uint8_t can_iface_id,
+                        const uint32_t arbitration_id,
+                        const uint8_t *data,
+                        const uint8_t size) {
 #if defined(DEBUG)
     print_array(data, size);
 #endif
     return mock()
         .actualCall("isotp_user_send_can")
+        .withUnsignedIntParameter("can_iface_id", can_iface_id)
         .withUnsignedIntParameter("arbitration_id", arbitration_id)
         .withMemoryBufferParameter("data", data, size)
         .withUnsignedIntParameter("size", size)
@@ -25,12 +30,14 @@ int isotp_user_send_can(const uint32_t arbitration_id, const uint8_t *data, cons
 }
 }
 
-void expect_isotp_user_send_can(const uint32_t arbitration_id,
+void expect_isotp_user_send_can(const uint8_t can_iface_id,
+                                const uint32_t arbitration_id,
                                 const uint8_t *data,
                                 const uint8_t size,
                                 const int return_value) {
     mock()
         .expectOneCall("isotp_user_send_can")
+        .withUnsignedIntParameter("can_iface_id", can_iface_id)
         .withUnsignedIntParameter("arbitration_id", arbitration_id)
         .withMemoryBufferParameter("data", data, size)
         .withUnsignedIntParameter("size", size)

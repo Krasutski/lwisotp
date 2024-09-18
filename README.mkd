@@ -27,7 +27,8 @@ First, create some [shim](https://en.wikipedia.org/wiki/Shim_(computing)) functi
     /* required, this must send a single CAN message with the given arbitration
      * ID (i.e. the CAN message ID) and data. The size will never be more than 8
      * bytes. */
-    int  isotp_user_send_can(const uint32_t arbitration_id,
+    int  isotp_user_send_can(const uint8_t can_iface_id,
+                             const uint32_t arbitration_id,
                              const uint8_t* data, const uint8_t size) {
         // ...
     }
