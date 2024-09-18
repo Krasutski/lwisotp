@@ -18,69 +18,71 @@
 /**************************************************************
  * internal used defines
  *************************************************************/
-#define ISOTP_RET_OK         0
-#define ISOTP_RET_ERROR      -1
-#define ISOTP_RET_INPROGRESS -2
-#define ISOTP_RET_OVERFLOW   -3
-#define ISOTP_RET_WRONG_SN   -4
-#define ISOTP_RET_NO_DATA    -5
-#define ISOTP_RET_TIMEOUT    -6
-#define ISOTP_RET_LENGTH     -7
-
-/* return logic true if 'a' is after 'b' */
-#define IsoTpTimeAfter(a, b) ((int32_t)((int32_t)(b) - (int32_t)(a)) < 0)
+typedef enum {
+    ISOTP_RET_OK = 0,
+    ISOTP_RET_ERROR = -1,
+    ISOTP_RET_IN_PROGRESS = -2,
+    ISOTP_RET_OVERFLOW = -3,
+    ISOTP_RET_WRONG_SN = -4,
+    ISOTP_RET_NO_DATA = -5,
+    ISOTP_RET_TIMEOUT = -6,
+    ISOTP_RET_LENGTH = -7,
+} isotp_result_t;
 
 /*  invalid bs */
 #define ISOTP_INVALID_BS 0xFFFF
 
+/* Minimum flow control frame size */
+#define ISOTP_MIN_FLOW_CONTROL_FRAME_SIZE 3
+
 /* ISOTP sender status */
 typedef enum {
     ISOTP_SEND_STATUS_IDLE,
-    ISOTP_SEND_STATUS_INPROGRESS,
+    ISOTP_SEND_STATUS_IN_PROGRESS,
     ISOTP_SEND_STATUS_ERROR,
-} IsoTpSendStatusTypes;
+} isotp_send_status_type_t;
 
 /* ISOTP receiver status */
 typedef enum {
     ISOTP_RECEIVE_STATUS_IDLE,
-    ISOTP_RECEIVE_STATUS_INPROGRESS,
+    ISOTP_RECEIVE_STATUS_IN_PROGRESS,
     ISOTP_RECEIVE_STATUS_FULL,
-} IsoTpReceiveStatusTypes;
+} isotp_receive_status_type_t;
 
-/* can fram defination */
+/* can frame defintion */
 #if defined(ISOTP_BYTE_ORDER_LITTLE_ENDIAN)
 typedef struct {
     uint8_t reserve_1 : 4;
     uint8_t type      : 4;
     uint8_t reserve_2[7];
-} IsoTpPciType;
+} isotp_pci_type_t;
 
 typedef struct {
-    uint8_t SF_DL : 4;
+    uint8_t sf_dl : 4;
     uint8_t type  : 4;
     uint8_t data[7];
-} IsoTpSingleFrame;
+} isotp_single_frame_t;
 
 typedef struct {
-    uint8_t FF_DL_high : 4;
+    uint8_t ff_dl_high : 4;
     uint8_t type       : 4;
-    uint8_t FF_DL_low;
+    uint8_t ff_dl_low;
     uint8_t data[6];
-} IsoTpFirstFrame;
+} isotp_first_frame_t;
 
 typedef struct {
-    uint8_t SN   : 4;
+    uint8_t sn   : 4;
     uint8_t type : 4;
     uint8_t data[7];
-} IsoTpConsecutiveFrame;
+} isotp_consecutive_frame_t;
 
 typedef struct {
-    uint8_t FS   : 4;
+    uint8_t fs   : 4;
     uint8_t type : 4;
-    uint8_t BS;
-    uint8_t STmin;
+    uint8_t bs;
+    uint8_t st_min;
     uint8_t reserve[5];
-} IsoTpFlowControl;
+} isotp_flow_control_t;
 
 #else
 
@@ -88,7 +90,7 @@ typedef struct {
     uint8_t type      : 4;
     uint8_t reserve_1 : 4;
     uint8_t reserve_2[7];
-} IsoTpPciType;
+} isotp_pci_type_t;
 
 /*
  * single frame
@@ -102,9 +104,9 @@ typedef struct {
  */
 typedef struct {
     uint8_t type  : 4;
-    uint8_t SF_DL : 4;
+    uint8_t sf_dl : 4;
     uint8_t data[7];
-} IsoTpSingleFrame;
+} isotp_single_frame_t;
 
 /*
  * first frame
@@ -118,10 +120,10 @@ typedef struct {
  */
 typedef struct {
     uint8_t type       : 4;
-    uint8_t FF_DL_high : 4;
-    uint8_t FF_DL_low;
+    uint8_t ff_dl_high : 4;
+    uint8_t ff_dl_low;
     uint8_t data[6];
-} IsoTpFirstFrame;
+} isotp_first_frame_t;
 
 /*
  * consecutive frame
@@ -135,9 +137,9 @@ typedef struct {
  */
 typedef struct {
     uint8_t type : 4;
-    uint8_t SN   : 4;
+    uint8_t sn   : 4;
     uint8_t data[7];
-} IsoTpConsecutiveFrame;
+} isotp_consecutive_frame_t;
 
 /*
  * flow control frame
@@ -151,28 +153,28 @@ typedef struct {
  */
 typedef struct {
     uint8_t type : 4;
-    uint8_t FS   : 4;
-    uint8_t BS;
-    uint8_t STmin;
+    uint8_t fs   : 4;
+    uint8_t bs;
+    uint8_t st_min;
     uint8_t reserve[5];
-} IsoTpFlowControl;
+} isotp_flow_control_t;
 
 #endif
 
 typedef struct {
     uint8_t ptr[8];
-} IsoTpDataArray;
+} isotp_data_array_t;
 
 typedef struct {
     union {
-        IsoTpPciType common;
-        IsoTpSingleFrame single_frame;
-        IsoTpFirstFrame first_frame;
-        IsoTpConsecutiveFrame consecutive_frame;
-        IsoTpFlowControl flow_control;
-        IsoTpDataArray data_array;
+        isotp_pci_type_t common;
+        isotp_single_frame_t single_frame;
+        isotp_first_frame_t first_frame;
+        isotp_consecutive_frame_t consecutive_frame;
+        isotp_flow_control_t flow_control;
+        isotp_data_array_t data_array;
     } as;
-} IsoTpCanMessage;
+} isotp_can_message_t;
 
 /**************************************************************
  * protocol specific defines
@@ -182,25 +184,25 @@ typedef struct {
 typedef enum {
     ISOTP_PCI_TYPE_SINGLE = 0x0,
     ISOTP_PCI_TYPE_FIRST_FRAME = 0x1,
-    TSOTP_PCI_TYPE_CONSECUTIVE_FRAME = 0x2,
+    ISOTP_PCI_TYPE_CONSECUTIVE_FRAME = 0x2,
     ISOTP_PCI_TYPE_FLOW_CONTROL_FRAME = 0x3
-} IsoTpProtocolControlInformation;
+} isotp_protocol_control_information_t;
 
 /* Private: Protocol Control Information (PCI) flow control identifiers. */
 typedef enum {
     PCI_FLOW_STATUS_CONTINUE = 0x0,
     PCI_FLOW_STATUS_WAIT = 0x1,
     PCI_FLOW_STATUS_OVERFLOW = 0x2
-} IsoTpFlowStatus;
+} isotp_flow_status_t;
 
-/* Private: network layer resault code. */
-#define ISOTP_PROTOCOL_RESULT_OK           0
-#define ISOTP_PROTOCOL_RESULT_TIMEOUT_A    -1
-#define ISOTP_PROTOCOL_RESULT_TIMEOUT_BS   -2
-#define ISOTP_PROTOCOL_RESULT_TIMEOUT_CR   -3
-#define ISOTP_PROTOCOL_RESULT_WRONG_SN     -4
-#define ISOTP_PROTOCOL_RESULT_INVALID_FS   -5
-#define ISOTP_PROTOCOL_RESULT_UNEXP_PDU    -6
-#define ISOTP_PROTOCOL_RESULT_WFT_OVRN     -7
-#define ISOTP_PROTOCOL_RESULT_BUFFER_OVFLW -8
-#define ISOTP_PROTOCOL_RESULT_ERROR        -9
+/* Private: network layer result code. */
+#define ISOTP_PROTOCOL_RESULT_OK              0
+#define ISOTP_PROTOCOL_RESULT_TIMEOUT_A       -1
+#define ISOTP_PROTOCOL_RESULT_TIMEOUT_BS      -2
+#define ISOTP_PROTOCOL_RESULT_TIMEOUT_CR      -3
+#define ISOTP_PROTOCOL_RESULT_WRONG_SN        -4
+#define ISOTP_PROTOCOL_RESULT_INVALID_FS      -5
+#define ISOTP_PROTOCOL_RESULT_UNEXPECTED_PDU  -6
+#define ISOTP_PROTOCOL_RESULT_WFT_OVERRUN     -7
+#define ISOTP_PROTOCOL_RESULT_BUFFER_OVERFLOW -8
+#define ISOTP_PROTOCOL_RESULT_ERROR           -9

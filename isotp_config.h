@@ -1,11 +1,11 @@
 #pragma once
 
 /* Max number of messages the receiver can receive at one time, this value
- * is affectied by can driver queue length
+ * is affected by can driver queue length
  */
 #define CONFIG_ISOTP_DEFAULT_BLOCK_SIZE 8
 
-/* The STmin parameter value specifies the minimum time gap allowed between
+/* The st_min parameter value specifies the minimum time gap allowed between
  * the transmission of consecutive frame network protocol data units
  */
 #define CONFIG_ISOTP_DEFAULT_ST_MIN 0
