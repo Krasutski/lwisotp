@@ -96,3 +96,15 @@ add_custom_target(generate-coverage DEPENDS test_runner
 message("CMAKE_C_COMPILER " ${CMAKE_C_COMPILER})
 message("CMAKE_CXX_COMPILER " ${CMAKE_CXX_COMPILER})
 message("CMAKE_ASM_COMPILER " ${CMAKE_ASM_COMPILER})
+
+
+target_compile_options(isotp
+    PUBLIC
+        $<$<COMPILE_LANGUAGE:C>:${COMPILE_OPTIONS_C}>
+        $<$<COMPILE_LANGUAGE:CXX>:${COMPILE_OPTIONS_CXX}>
+)
+
+target_link_options(isotp
+    PUBLIC
+        ${COMPILE_OPTIONS_CXX}
+)
