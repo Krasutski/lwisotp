@@ -58,10 +58,10 @@ static int _send_flow_control(isotp_link_t const *link, uint8_t flow_status, uin
     return ret;
 }
 
-static int _send_single_frame(isotp_link_t const *link, uint32_t id) {
+static isotp_result_t _send_single_frame(isotp_link_t const *link, uint32_t id) {
 
     isotp_can_message_t message;
-    int ret;
+    isotp_result_t ret;
 
     /* multi frame message length must greater than 7  */
 #if CONFIG_ISOTP_ENABLE_ASSERT == 1U
@@ -78,18 +78,18 @@ static int _send_single_frame(isotp_link_t const *link, uint32_t id) {
     (void)memset(message.as.single_frame.data + link->send_size,
                  0,
                  sizeof(message.as.single_frame.data) - link->send_size);
-    ret = isotp_user_send_can(link->can_iface_id, id, message.as.data_array.ptr, sizeof(message));
+    ret = (isotp_result_t)isotp_user_send_can(link->can_iface_id, id, message.as.data_array.ptr, sizeof(message));
 #else
-    ret = isotp_user_send_can(link->can_iface_id, id, message.as.data_array.ptr, link->send_size + 1);
+    ret = (isotp_result_t)isotp_user_send_can(link->can_iface_id, id, message.as.data_array.ptr, link->send_size + 1);
 #endif
 
     return ret;
 }
 
-static int _send_first_frame(isotp_link_t *link, uint32_t id) {
+static isotp_result_t _send_first_frame(isotp_link_t *link, uint32_t id) {
 
     isotp_can_message_t message;
-    int ret;
+    isotp_result_t ret;
 
     /* multi frame message length must greater than 7  */
 #if CONFIG_ISOTP_ENABLE_ASSERT == 1U
@@ -103,7 +103,7 @@ static int _send_first_frame(isotp_link_t *link, uint32_t id) {
     (void)memcpy(message.as.first_frame.data, link->send_buffer, sizeof(message.as.first_frame.data));
 
     /* send message */
-    ret = isotp_user_send_can(link->can_iface_id, id, message.as.data_array.ptr, sizeof(message));
+    ret = (isotp_result_t)isotp_user_send_can(link->can_iface_id, id, message.as.data_array.ptr, sizeof(message));
     if (ISOTP_RET_OK == ret) {
         link->send_offset += sizeof(message.as.first_frame.data);
         link->send_sn = 1;
@@ -153,7 +153,7 @@ static int _send_consecutive_frame(isotp_link_t *link) {
     return ret;
 }
 
-static int _receive_single_frame(isotp_link_t *link, isotp_can_message_t const *message, uint8_t len) {
+static isotp_result_t _receive_single_frame(isotp_link_t *link, isotp_can_message_t const *message, uint8_t len) {
     /* check data length */
     if ((0 == message->as.single_frame.sf_dl) || (message->as.single_frame.sf_dl > (len - 1))) {
         ISOTP_DEBUG("Single-frame length too small.");
@@ -167,7 +167,7 @@ static int _receive_single_frame(isotp_link_t *link, isotp_can_message_t const *
     return ISOTP_RET_OK;
 }
 
-static int _receive_first_frame(isotp_link_t *link, isotp_can_message_t const *message, uint8_t len) {
+static isotp_result_t _receive_first_frame(isotp_link_t *link, isotp_can_message_t const *message, uint8_t len) {
     uint16_t payload_length;
 
     if (8 != len) {
@@ -177,7 +177,7 @@ static int _receive_first_frame(isotp_link_t *link, isotp_can_message_t const *m
 
     /* check data length */
     payload_length = message->as.first_frame.ff_dl_high;
-    payload_length = (payload_length << 8) + message->as.first_frame.ff_dl_low;
+    payload_length = (uint16_t)(payload_length << 8) + message->as.first_frame.ff_dl_low;
 
     /* should not use multiple frame transmission */
     if (payload_length <= 7) {
@@ -199,7 +199,7 @@ static int _receive_first_frame(isotp_link_t *link, isotp_can_message_t const *m
     return ISOTP_RET_OK;
 }
 
-static int _receive_consecutive_frame(isotp_link_t *link, isotp_can_message_t const *message, uint8_t len) {
+static isotp_result_t _receive_consecutive_frame(isotp_link_t *link, isotp_can_message_t const *message, uint8_t len) {
     uint16_t remaining_bytes;
 
     /* check sn */
@@ -443,13 +443,12 @@ void isotp_on_can_message(isotp_link_t *link, uint8_t const *data, uint8_t len) 
 }
 
 isotp_result_t isotp_receive(isotp_link_t *link, uint8_t *payload, const uint16_t payload_size, uint16_t *out_size) {
-    uint16_t copy_len;
 
     if (ISOTP_RECEIVE_STATUS_FULL != link->receive_status) {
         return ISOTP_RET_NO_DATA;
     }
 
-    copy_len = link->receive_size;
+    uint16_t copy_len = link->receive_size;
     if (copy_len > payload_size) {
         copy_len = payload_size;
     }
