@@ -53,15 +53,15 @@ typedef struct isotp_link_s {
     int receive_protocol_result;
     uint8_t receive_status;
 
-    /* can interface id */
-    uint8_t can_iface_id;
+    /* User context */
+    void *context;
 } isotp_link_t;
 
 /**
  * @brief Initialises the ISO-TP library.
  *
  * @param link The @code isotp_link_t @endcode instance intended for receiving and transmitting data.
- * @param can_iface_id The can interface ID used to manage several CAN interfaces.
+ * @param context User context. Could be used for passing a pointer to the CAN driver, for example.
  * @param tx_buf A pointer to an area in memory which can be used as a buffer for data to be sent.
  * @param tx_buf A pointer to an area in memory which can be used as a buffer for data to be sent.
  * @param tx_buf_size The size of the buffer area.
@@ -69,7 +69,7 @@ typedef struct isotp_link_s {
  * @param rx_buf_size The size of the buffer area.
  */
 void isotp_init_link(isotp_link_t *link,
-                     uint8_t can_iface_id,
+                     void *context,
                      uint32_t send_id,
                      uint8_t *tx_buf,
                      uint16_t tx_buf_size,
